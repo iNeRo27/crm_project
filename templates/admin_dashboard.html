@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+</head>
+<body>
+
+    <h2>All Requests</h2>
+
+    <table border="1">
+        <tr>
+            <th>User</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Phone</th>
+            <th>Date</th>
+        </tr>
+
+        {% for req in requests %}
+        <tr>
+            <td>{{ req.user.name }}</td>
+            <td>{{ req.type }}</td>
+            <td>{{ req.description }}</td>
+            <td>{{ req.phone }}</td>
+            <td>{{ req.created_at }}</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</body>
+</html>

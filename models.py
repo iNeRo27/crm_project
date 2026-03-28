@@ -9,6 +9,8 @@ class User(db.Model):
     password = db.Column(db.String(200))
     role = db.Column(db.String(10), default="user")  # user or admin
 
+    requests = db.relationship('Request', backref='user', lazy=True)
+
 #  Request Table
 class Request(db.Model):
     id = db.Column(db.Integer, primary_key=True)

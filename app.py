@@ -44,13 +44,20 @@ def login():
         name = request.form["name"]
         password = request.form["password"]
 
+        # check user in database
         user = User.query.filter_by(name=name, password=password).first()
 
         if user:
+            # save session
             session["user_id"] = user.id
             session["user_name"] = user.name
+            session["role"] = user.role
 
-            return redirect("/dashboard")
+            # redirect based on role
+            if user.role == "admin":
+                return redirect("/admin")
+            else:
+                return redirect("/request")
         else:
             return "Invalid name or password"
 
@@ -89,7 +96,25 @@ def request_page():
 
     return render_template("request.html")
 
+# admin route
+@app.route("/admin")
+def admin_dashboard():
+    if "user_id" not in session or session.get("role") != "admin":
+        return redirect("/login")
+
+    requests = Request.query.all()
+
+    return render_template("admin_dashboard.html", requests=requests)
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()  # create tables
+
+        # create admin 
+        if not User.query.filter_by(name="admin").first():
+            admin = User(name="admin", password="admin123", role="admin")
+            db.session.add(admin)
+            db.session.commit()
+
+            
     app.run(debug=True)
