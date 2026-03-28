@@ -1,5 +1,5 @@
-from flask import Flask
-from models import db
+from flask import Flask, render_template, request, redirect
+from models import db, User
 
 app = Flask(__name__)
 
@@ -16,6 +16,22 @@ db.init_app(app)
 @app.route("/")
 def home():
     return "CRM is running "
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        name = request.form["name"]
+        password = request.form["password"]
+
+        # create new user
+        new_user = User(name=name, password=password)
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        return redirect("/")
+
+    return render_template("register.html")
 
 if __name__ == "__main__":
     with app.app_context():
