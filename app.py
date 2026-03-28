@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect
-from models import db, User
+from models import db, User, Request
 from flask import session   
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -61,6 +62,32 @@ def dashboard():
         return redirect("/login")
 
     return f"Welcome {session['user_name']} "
+
+# request route
+@app.route("/request", methods=["GET", "POST"])
+def request_page():
+    if "user_id" not in session:
+        return redirect("/login")
+
+    if request.method == "POST":
+        req_type = request.form["type"]
+        description = request.form["description"]
+        phone = request.form["phone"]
+
+        new_request = Request(
+            user_id=session["user_id"],
+            type=req_type,
+            description=description,
+            phone=phone,
+            created_at=datetime.now()
+        )
+
+        db.session.add(new_request)
+        db.session.commit()
+
+        return "Request submitted successfully ✅"
+
+    return render_template("request.html")
 
 if __name__ == "__main__":
     with app.app_context():
