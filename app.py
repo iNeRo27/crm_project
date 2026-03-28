@@ -92,7 +92,7 @@ def request_page():
         db.session.add(new_request)
         db.session.commit()
 
-        return "Request submitted successfully ✅"
+        return "Request submitted successfully ✅ <a href='/request'>Submit another</a>"
 
     return render_template("request.html")
 
@@ -105,6 +105,12 @@ def admin_dashboard():
     requests = Request.query.all()
 
     return render_template("admin_dashboard.html", requests=requests)
+
+# Logout route
+@app.route("/logout")
+def logout():
+    session.clear()  # remove all session data
+    return redirect("/login")
 
 if __name__ == "__main__":
     with app.app_context():
