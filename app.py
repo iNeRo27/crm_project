@@ -29,13 +29,18 @@ def home():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        name = request.form["name"]
+        name = request.form["name"].lower()  # convert to lowercase for consistency
         password = request.form["password"]
         confirm_password = request.form["confirm_password"]
 
         # check if passwords match
         if password != confirm_password:
             flash("Passwords do not match")
+            return redirect("/register")
+        
+        # check password length
+        if len(password) < 6:
+            flash("Password must be at least 6 characters")
             return redirect("/register")
         
         # check if user already exists
@@ -62,7 +67,7 @@ def register():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        name = request.form["name"]
+        name = request.form["name"].lower()  # convert to lowercase for consistency
         password = request.form["password"]
 
         # check user in database
