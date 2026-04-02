@@ -135,6 +135,24 @@ def logout():
     session.clear()  # remove all session data
     return redirect("/login")
 
+# delete request for admin dashboard
+@app.route("/delete/<int:req_id>")
+def delete_request(req_id):
+    #check if admin
+    if "user_id" not in session or session.get("role") != "admin":
+        return redirect("/login")
+    
+    #get request by id
+    req = Request.query.get(req_id)
+
+    # delete 
+    if req:
+        db.session.delete(req)
+        db.session.commit()
+
+    return redirect("/admin")    
+        
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()  # create tables
