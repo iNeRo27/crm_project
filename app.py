@@ -18,7 +18,12 @@ db.init_app(app)
 # home route
 @app.route("/")
 def home():
-    return "CRM is running "
+    if "user_id" in session:
+        if session.get("role") == "admin":
+            return redirect("/admin")
+        else: 
+            return redirect("/request")
+    return render_template("home.html")    
 
 # register route
 @app.route("/register", methods=["GET", "POST"])
