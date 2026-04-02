@@ -13,6 +13,14 @@
         <label>Password:</label><br>
         <input type="password" name="password" required><br><br>
 
+                {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color:red;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
         <button type="submit">Login</button>
     </form>
 

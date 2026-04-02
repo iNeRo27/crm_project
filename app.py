@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from models import db, User, Request
-from flask import session   
+from flask import session, flash
 from datetime import datetime
 
 app = Flask(__name__)
@@ -31,6 +31,17 @@ def register():
     if request.method == "POST":
         name = request.form["name"]
         password = request.form["password"]
+        confirm_password = request.form["confirm_password"]
+
+        # check if passwords match
+        if password != confirm_password:
+            flash("Passwords do not match")
+            return redirect("/register")
+        
+        # check if user already exists
+        if User.query.filter_by(name=name).first():
+            flash("User already exists")
+            return redirect("/register")
 
         # create new user
         new_user = User(name=name, password=password)
@@ -38,7 +49,12 @@ def register():
         db.session.add(new_user)
         db.session.commit()
 
-        return redirect("/")
+        # auto login after registration
+        session["user_id"] = new_user.id
+        session["user_name"] = new_user.name
+        session["role"] = new_user.role
+
+        return redirect("/request")
 
     return render_template("register.html")
 
@@ -64,7 +80,8 @@ def login():
             else:
                 return redirect("/request")
         else:
-            return "Invalid name or password"
+            flash("Invalid credentials")
+            return redirect("/login")
 
     return render_template("login.html")
 
