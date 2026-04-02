@@ -114,7 +114,8 @@ def request_page():
         db.session.add(new_request)
         db.session.commit()
 
-        return "Request submitted successfully ✅ <a href='/request'>Submit another</a>"
+        flash("Request submitted successfully")
+        return redirect("/request")
 
     return render_template("request.html")
 

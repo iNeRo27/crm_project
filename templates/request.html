@@ -1,9 +1,12 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 <!DOCTYPE html>
 <html>
 <head>
     <title>Request Service</title>
 </head>
 <body>
+    <div class="container">
 
     <h2>Submit Request</h2>
 
@@ -15,14 +18,26 @@
         </select><br><br>
 
         <label>Description:</label><br>
-        <textarea name="description" required></textarea><br><br>
+        <textarea name="description" placeholder="Describe your issue..." required></textarea><br>
 
         <label>Phone:</label><br>
-        <input type="text" name="phone" required><br><br>
+        <input type="text" name="phone" placeholder="Enter your phone number..." required><br>
+
+                    {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
+            <div class="success">
+                {{ message }}
+            </div>
+
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
 
         <button type="submit">Submit</button>
-        <button type="button" onclick="window.location.href='/logout'">Logout</button>
     </form>
-
+    <br> 
+    <a href="/logout"><button>Logout</button></a>
+    </div>
 </body>
 </html>

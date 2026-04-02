@@ -1,3 +1,5 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 <!DOCTYPE html>
 <html>
 
@@ -5,23 +7,17 @@
     <title>Welcome</title>
 </head>
 
-<body style="text-align:center; margin-top:80px;">
-
-    <h1>Welcome to CRM System</h1>
-
-    <br><br>
-
-    <div style="display: flex; justify-content: center; gap: 20px; margin-top: -30px;">
-
-        <a href="/login">
-            <button style="padding:10px 20px;">Login</button>
-        </a>
-
-        <a href="/register">
-            <button style="padding:10px 20px;">Register</button>
-        </a>
-
+<body>
+    <div class="container">
+        <h1>Welcome to the CRM System</h1>
+        
+        <div class="button-gorup">
+            <a href="/login"><button>Login</button></a>
+            <a href="/register"><button>Register</button></a>
+        </div>
     </div>
+
+   
 
 </body>
 

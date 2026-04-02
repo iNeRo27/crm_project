@@ -1,32 +1,40 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Admin Dashboard</title>
 </head>
+
 <body>
+    <div class="container">
+        <h2>Admin Dashboard</h2>
 
-    <h2>All Requests</h2>
+        <a href="/logout"><button>Logout</button></a>
 
-    <table border="1">
-        <tr>
-            <th>User</th>
-            <th>Type</th>
-            <th>Description</th>
-            <th>Phone</th>
-            <th>Date</th>
-        </tr>
+        <table>
+            <tr>
+                <th>User</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Phone</th>
+                <th>Date</th>
+            </tr>
 
-        {% for req in requests %}
-        <tr>
-            <td>{{ req.user.name }}</td>
-            <td>{{ req.type }}</td>
-            <td>{{ req.description }}</td>
-            <td>{{ req.phone }}</td>
-            <td>{{ req.created_at }}</td>
-        </tr>
-        {% endfor %}
+            {% for req in requests %}
+            <tr>
+                <td>{{ req.user.name }}</td>
+                <td>{{ req.type }}</td>
+                <td>{{ req.description }}</td>
+                <td>{{ req.phone }}</td>
+                <td>{{ req.created_at }}</td>
+            </tr>
+            {% endfor %}
 
-    </table>
+        </table>
+    </div>
 
 </body>
+
 </html>
