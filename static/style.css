@@ -34,7 +34,7 @@ button:hover {
     background-color: #0056b3;
 }
 
-/* messages */
+/* error messages */
 .message {
     color: red;
     background: #ffe6e6;
@@ -72,17 +72,20 @@ table {
     overflow: hidden;  
 }
 
+/* table headers and cells */
 th, td {
     padding: 12px;
     border-bottom: 1px solid #ddd;
     text-align: center;
 }
 
+/* header style */
 th {
     background-color: #007BFF;
     color: white;
 }
 
+/* hover effect for table rows */
 tr:hover {
     background-color: #f1f1f1;
 }

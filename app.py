@@ -103,6 +103,11 @@ def request_page():
         description = request.form["description"]
         phone = request.form["phone"]
 
+        # Phone number validation 
+        if not phone.isdigit():
+            flash("Invalid phone number", "message")
+            return redirect("/request")
+
         new_request = Request(
             user_id=session["user_id"],
             type=req_type,
@@ -114,7 +119,7 @@ def request_page():
         db.session.add(new_request)
         db.session.commit()
 
-        flash("Request submitted successfully")
+        flash("Request submitted successfully", "success")
         return redirect("/request")
 
     return render_template("request.html")
