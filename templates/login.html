@@ -1,36 +1,37 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
-    <div class="container">
-        <h2>Login</h2>
+    <div class="center">
+        <div class="card">
+            <h2>Login</h2>
 
-        <form method="POST">
-            <label>Name:</label><br>
-            <input type="text" name="name" required><br><br>
+            <form method="POST">
+                <label>Name:</label><br>
+                <input type="text" name="name" required><br><br>
 
-            <label>Password:</label><br>
-            <input type="password" name="password" required><br><br>
+                <label>Password:</label><br>
+                <input type="password" name="password" required><br><br>
 
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            {% for message in messages %}
-            <div class="message">
-                {{ message }}
-            </div>
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                {% for message in messages %}
+                <div class="message">
+                    {{ message }}
+                </div>
 
-            {% endfor %}
-            {% endif %}
-            {% endwith %}
+                {% endfor %}
+                {% endif %}
+                {% endwith %}
 
-            <button type="submit">Login</button>
-        </form>
+                <button type="submit">Login</button>
+            </form>
+        </div>
     </div>
 </body>
 

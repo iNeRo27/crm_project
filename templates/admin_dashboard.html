@@ -1,17 +1,16 @@
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
     <div class="container">
         <h2>Admin Dashboard</h2>
 
-        <a href="/logout"><button>Logout</button></a>
+        <a href="/logout"><button class="logout-btn">Logout</button></a>
 
         <table>
             <tr>
