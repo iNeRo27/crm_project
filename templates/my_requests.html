@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Requests</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+        <h2>My Requests 📋</h2>
+
+        <a href="/request"><button>New Request</button></a>
+
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Phone</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+
+            {% for req in requests %}
+            <tr>
+                <td>{{ req.type }}</td>
+                <td>{{ req.description }}</td>
+                <td>{{ req.phone }}</td>
+                <td>{{ req.created_at }}</td>
+
+                <td>
+                    {% if req.status == "Pending" %}
+                        <span class="status-pending">Pending</span>
+                    {% elif req.status == "In Progress" %}
+                        <span class="status-progress">In Progress</span>
+                    {% elif req.status == "Solved" %}
+                        <span class="status-solved">Solved</span>
+                    {% else %}
+                        <span class="status-closed">Closed</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+
+</body>
+</html>

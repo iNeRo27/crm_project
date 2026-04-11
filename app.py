@@ -110,7 +110,11 @@ def request_page():
 
         # Phone number validation 
         if not phone.isdigit():
-            flash("Invalid phone number", "message")
+            flash("Phone must contain only numbers", "message")
+            return redirect("/request")
+        
+        if len(phone) != 10 or not phone.startswith("05"):
+            flash("Phone must start with 05 and it should be 10 digits", "message")
             return redirect("/request")
 
         new_request = Request(
@@ -129,29 +133,45 @@ def request_page():
 
     return render_template("request.html")
 
+# for users to see their requests
+@app.route("/my_requests")
+def my_requests():
+    if "user_id" not in session:
+        return redirect("/login")
+
+    user_id = session["user_id"]
+
+    requests = Request.query.filter_by(user_id=user_id).all()
+
+    return render_template("my_requests.html", requests=requests)
+
 # admin route
 @app.route("/admin")
 def admin_dashboard():
     if "user_id" not in session or session.get("role") != "admin":
         return redirect("/login")
 
-    requests = Request.query.all()
+    status_filter = request.args.get("status")
 
-    # Stats for dashboard
+    if status_filter:
+        requests = Request.query.filter_by(status=status_filter).all()
+    else:
+        requests = Request.query.all()
+
+    # stats 
     pending = Request.query.filter_by(status="Pending").count()
     progress = Request.query.filter_by(status="In Progress").count()
     solved = Request.query.filter_by(status="Solved").count()
     closed = Request.query.filter_by(status="Closed").count()
 
-    # render admin dashboard with requests and stats
     return render_template(
-    "admin_dashboard.html",
-    requests=requests,
-    pending=pending,
-    progress=progress,
-    solved=solved,
-    closed=closed
-)
+        "admin_dashboard.html",
+        requests=requests,
+        pending=pending,
+        progress=progress,
+        solved=solved,
+        closed=closed
+    )
     
 
 # Logout route

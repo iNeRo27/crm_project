@@ -34,8 +34,19 @@
                 {% endif %}
                 {% endwith %}
 
-                <button type="submit">Submit</button>
+                <div class="button-row">
+
+                    <button type="submit">Submit</button>
+
+                    <button type="button" onclick="location.href='/my_requests'">
+                        My Requests
+                    </button>
+
+                </div>
             </form>
+
+
+
             <br>
             <a href="/logout"><button class="logout-btn" style="margin: -8px;">Logout</button></a>
         </div>

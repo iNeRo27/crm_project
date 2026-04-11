@@ -62,6 +62,16 @@ button:hover {
     margin-top: 20px;
 }
 
+.button-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.button-row button {
+    width: auto; /* IMPORTANT */
+}
+
 /* table */
 table {
     width: 80%;
@@ -166,3 +176,18 @@ tr:hover {
 .progress { border-top: 5px solid blue; }
 .solved { border-top: 5px solid green; }
 .closed { border-top: 5px solid gray; }
+
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.filters button {
+    padding: 8px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+
