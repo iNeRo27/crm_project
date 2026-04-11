@@ -12,6 +12,31 @@
 
         <a href="/logout"><button class="logout-btn">Logout</button></a>
 
+        <!-- Stats -->
+        <div class="stats-cards">
+
+            <div class="card stat-card pending">
+                <h3>🟡 Pending</h3>
+                <p>{{ pending }}</p>
+            </div>
+
+            <div class="card stat-card progress">
+                <h3>🔵 In Progress</h3>
+                <p>{{ progress }}</p>
+            </div>
+
+            <div class="card stat-card solved">
+                <h3>🟢 Solved</h3>
+                <p>{{ solved }}</p>
+            </div>
+
+            <div class="card stat-card closed">
+                <h3>⚫ Closed</h3>
+                <p>{{ closed }}</p>
+            </div>
+
+        </div>
+
         <table>
             <tr>
                 <th>User</th>
@@ -19,7 +44,8 @@
                 <th>Description</th>
                 <th>Phone</th>
                 <th>Date</th>
-                <th>Action</th>
+                <th>Status</th>
+                <th>Update</th>
             </tr>
 
             {% for req in requests %}
@@ -29,15 +55,28 @@
                 <td>{{ req.description }}</td>
                 <td>{{ req.phone }}</td>
                 <td>{{ req.created_at }}</td>
+
+                <!-- Status with colors -->
                 <td>
-                    <a href="/delete/{{ req.id }}"
-                        onclick="return confirm('Are you sure you want to mark this as done?')">
-                        <button>Mark Done</button>
-                    </a>
+                    {% if req.status == "Pending" %}
+                    <span class="status-pending">Pending</span>
+                    {% elif req.status == "In Progress" %}
+                    <span class="status-progress">In Progress</span>
+                    {% elif req.status == "Solved" %}
+                    <span class="status-solved">Solved</span>
+                    {% else %}
+                    <span class="status-closed">Closed</span>
+                    {% endif %}
+                </td>
+
+                <td class="update-buttons">
+                    <a href="/update_status/{{ req.id }}/Pending">🟡</a>
+                    <a href="/update_status/{{ req.id }}/In Progress">🔵</a>
+                    <a href="/update_status/{{ req.id }}/Solved">🟢</a>
+                    <a href="/update_status/{{ req.id }}/Closed">⚫</a>
                 </td>
             </tr>
             {% endfor %}
-
         </table>
     </div>
 

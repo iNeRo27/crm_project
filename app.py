@@ -137,7 +137,22 @@ def admin_dashboard():
 
     requests = Request.query.all()
 
-    return render_template("admin_dashboard.html", requests=requests)
+    # Stats for dashboard
+    pending = Request.query.filter_by(status="Pending").count()
+    progress = Request.query.filter_by(status="In Progress").count()
+    solved = Request.query.filter_by(status="Solved").count()
+    closed = Request.query.filter_by(status="Closed").count()
+
+    # render admin dashboard with requests and stats
+    return render_template(
+    "admin_dashboard.html",
+    requests=requests,
+    pending=pending,
+    progress=progress,
+    solved=solved,
+    closed=closed
+)
+    
 
 # Logout route
 @app.route("/logout")
@@ -160,7 +175,22 @@ def delete_request(req_id):
         db.session.delete(req)
         db.session.commit()
 
-    return redirect("/admin")    
+    return redirect("/admin")  
+
+
+# update request status for admin dashboard
+@app.route("/update_status/<int:req_id>/<status>")
+def update_status(req_id, status):
+    if "user_id" not in session or session.get("role") != "admin":
+        return redirect("/login")
+
+    req = Request.query.get(req_id)
+
+    if req:
+        req.status = status
+        db.session.commit()
+
+    return redirect("/admin")  
         
 
 if __name__ == "__main__":

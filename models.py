@@ -19,3 +19,4 @@ class Request(db.Model):
     description = db.Column(db.Text)
     phone = db.Column(db.String(20))
     created_at = db.Column(db.DateTime)
+    status = db.Column(db.String(20), default="Pending")
