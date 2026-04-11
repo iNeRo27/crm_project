@@ -82,6 +82,8 @@ def login():
             # redirect based on role
             if user.role == "admin":
                 return redirect("/admin")
+            elif user.role == "moderator":
+                return redirect("/moderator")
             else:
                 return redirect("/request")
         else:
@@ -150,6 +152,8 @@ def my_requests():
 def admin_dashboard():
     if "user_id" not in session or session.get("role") != "admin":
         return redirect("/login")
+    
+    moderators = User.query.filter_by(role="moderator").all()
 
     status_filter = request.args.get("status")
 
@@ -167,6 +171,7 @@ def admin_dashboard():
     return render_template(
         "admin_dashboard.html",
         requests=requests,
+        moderators=moderators,
         pending=pending,
         progress=progress,
         solved=solved,
@@ -210,8 +215,49 @@ def update_status(req_id, status):
         req.status = status
         db.session.commit()
 
-    return redirect("/admin")  
-        
+    return redirect("/admin") 
+
+@app.route("/moderator")
+def moderator():
+    if session.get("role") != "moderator":
+        return redirect("/login")
+
+    name = session["user_name"]
+
+    requests = Request.query.filter_by(assigned_to=name).all()
+
+    return render_template("moderator.html", requests=requests)
+
+@app.route("/mod_update/<int:req_id>/<status>")
+def mod_update(req_id, status):
+    if session.get("role") != "moderator":
+        return redirect("/login")
+
+    req = Request.query.get(req_id)
+
+    if req and status in ["In Progress", "Solved"]:
+        req.status = status
+        db.session.commit()
+
+    return redirect("/moderator")
+
+@app.route("/assign/<int:req_id>/<moderator>")
+def assign(req_id, moderator):
+    if session.get("role") != "admin":
+        return redirect("/login")
+
+    message = request.args.get("message")
+
+    req = Request.query.get(req_id)
+
+    if req:
+        req.assigned_to = moderator
+        req.assignment_message = message
+        db.session.commit()
+
+    return redirect("/admin") 
+
+
 
 if __name__ == "__main__":
     with app.app_context():
@@ -223,5 +269,18 @@ if __name__ == "__main__":
             db.session.add(admin)
             db.session.commit()
 
+        # create moderators 
+        moderators = {
+            "ahmad": "111",
+            "bader": "222",
+            "khaled": "333"
+        }
+
+        for name, password in moderators.items():
+            if not User.query.filter_by(name=name).first():
+                mod = User(name=name, password=password, role="moderator")
+                db.session.add(mod)
+
+        db.session.commit()    
             
     app.run(debug=True)

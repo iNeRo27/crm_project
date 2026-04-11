@@ -20,3 +20,5 @@ class Request(db.Model):
     phone = db.Column(db.String(20))
     created_at = db.Column(db.DateTime)
     status = db.Column(db.String(20), default="Pending")
+    assigned_to = db.Column(db.String(100))      # moderator name
+    assignment_message = db.Column(db.Text)      # message

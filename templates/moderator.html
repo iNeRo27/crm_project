@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Moderator Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="container">
+    <h2>My Assigned Tasks 🛠️</h2>
+
+    <a href="/logout">
+        <button class="logout-btn">Logout</button>
+    </a>
+
+    <table>
+        <tr>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Phone</th>
+            <th>Message</th>
+            <th>Status</th>
+            <th>Update</th>
+        </tr>
+
+        {% for req in requests %}
+        <tr>
+            <td>{{ req.type }}</td>
+            <td>{{ req.description }}</td>
+            <td>{{ req.phone }}</td>
+            <td>{{ req.assignment_message or "-" }}</td>
+
+            <td>
+                {% if req.status == "Pending" %}
+                    <span class="status-pending">Pending</span>
+                {% elif req.status == "In Progress" %}
+                    <span class="status-progress">In Progress</span>
+                {% elif req.status == "Solved" %}
+                    <span class="status-solved">Solved</span>
+                {% else %}
+                    <span class="status-closed">Closed</span>
+                {% endif %}
+            </td>
+
+            <td class="update-buttons">
+                <a href="/mod_update/{{ req.id }}/In Progress"><button>Start</button></a>
+                <a href="/mod_update/{{ req.id }}/Solved"><button>Solve</button></a>
+            </td>
+        </tr>
+        {% endfor %}
+
+    </table>
+</div>
+
+</body>
+</html>

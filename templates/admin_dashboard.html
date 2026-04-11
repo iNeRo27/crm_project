@@ -56,6 +56,9 @@
                 <th>Date</th>
                 <th>Status</th>
                 <th>Update</th>
+                <th>Assigned To</th>
+                <th>Message</th>
+                <th>Assign</th>
             </tr>
 
             {% for req in requests %}
@@ -79,16 +82,107 @@
                     {% endif %}
                 </td>
 
-                <td class="update-buttons">
-                    <a href="/update_status/{{ req.id }}/Pending">🟡</a>
-                    <a href="/update_status/{{ req.id }}/In Progress">🔵</a>
-                    <a href="/update_status/{{ req.id }}/Solved">🟢</a>
-                    <a href="/update_status/{{ req.id }}/Closed">⚫</a>
+                <td>
+                    <button onclick="openUpdateModal('{{ req.id }}')">Update</button>
                 </td>
+
+                <td>{{ req.assigned_to or "-" }}</td>
+                <td>{{ req.assignment_message or "-" }}</td>
+
+                <td>
+                    <button onclick="openModal('{{ req.id }}')">Assign</button>
+                </td>
+
+
             </tr>
             {% endfor %}
         </table>
     </div>
+
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+
+            <h3>Update Status</h3>
+
+            <input type="hidden" id="update_req_id">
+
+            <label>Status:</label>
+            <select id="status">
+                <option value="Pending">Pending</option>
+                <option value="In Progress">In Progress</option>
+                <option value="Solved">Solved</option>
+                <option value="Closed">Closed</option>
+            </select>
+
+            <br><br>
+
+            <button onclick="submitUpdate()">Update</button>
+            <button onclick="closeUpdateModal()">Cancel</button>
+
+        </div>
+    </div>
+
+    <div id="assignModal" class="modal">
+        <div class="modal-content">
+
+            <h3>Assign Task</h3>
+
+            <input type="hidden" id="req_id">
+
+            <label>Moderator:</label>
+            <select id="moderator">
+                {% for mod in moderators %}
+                <option value="{{ mod.name }}">{{ mod.name }}</option>
+                {% endfor %}
+            </select>
+
+            <label>Message:</label>
+            <textarea id="message" placeholder="Write instructions..."></textarea>
+
+            <br><br>
+
+            <button onclick="submitAssign()">Assign</button>
+            <button onclick="closeModal()">Cancel</button>
+
+        </div>
+    </div>
+
+    <script>
+        function openUpdateModal(reqId) {
+            document.getElementById("updateModal").style.display = "block";
+            document.getElementById("update_req_id").value = reqId;
+        }
+
+        function closeUpdateModal() {
+            document.getElementById("updateModal").style.display = "none";
+        }
+
+        function submitUpdate() {
+            let reqId = document.getElementById("update_req_id").value;
+            let status = document.getElementById("status").value;
+
+            location.href = `/update_status/${reqId}/${status}`;
+        }
+    </script>
+
+    <script>
+        function openModal(reqId) {
+            document.getElementById("assignModal").style.display = "block";
+            document.getElementById("req_id").value = reqId;
+        }
+
+        function closeModal() {
+            document.getElementById("assignModal").style.display = "none";
+        }
+
+        function submitAssign() {
+            let reqId = document.getElementById("req_id").value;
+            let moderator = document.getElementById("moderator").value;
+            let message = document.getElementById("message").value;
+
+            location.href = `/assign/${reqId}/${moderator}?message=${encodeURIComponent(message)}`;
+        }
+    </script>
 
 </body>
 
